@@ -16,11 +16,11 @@ exports.sendListenerPushNotification = functions.database.ref("/fallenPackageEve
   const fallenPackageEventId = context.params.fallenPackageEventId;
   const packageData = data.after.val();
 
-  const fallenDate = new Date(packageData.createdDate).toTimeString();
+  const fallenDate = new Date(packageData.createdDate).toLocaleString('en-US', {timeZone: 'America/New_York'});
   const conveyorBeltId = packageData.conveyorBeltId;
   const companyId = packageData.companyId;
 
-  const tokens = (await admin.database().ref(`/companies/${companyId}/tokens`).once("value")).val();
+  const tokens = Object.keys((await admin.database().ref(`/companies/${companyId}/tokens`).once("value")).val());
   const conveyorBeltName = (await admin.database().ref(`/conveyorBelts/${conveyorBeltId}/name`).once("value")).val();
   const jsonData = {conveyorBeltName: conveyorBeltName, fallenDate: fallenDate, fallenPackageEventId: fallenPackageEventId};
 
